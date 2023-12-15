@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>心形烟花</title>
+    <style>
+        canvas {
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworksCanvas"></canvas>
+
+    <script>
+        // 获取画布元素
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 设置画布尺寸
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 创建心形路径
+        function createHeartPath() {
+            ctx.beginPath();
+            ctx.moveTo(75, 40);
+            ctx.bezierCurveTo(75, 37, 70, 25, 50, 25);
+            ctx.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5);
+            ctx.bezierCurveTo(20, 80, 40, 102, 75, 120);
+            ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
+            ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
+            ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
+            ctx.closePath();
+        }
+
+        // 渲染心形烟花
+        function renderFirework(x, y, color) {
+            ctx.fillStyle = color;
+
+            // 创建多个心形路径
+            for (let i = 0; i < 30; i++) {
+                createHeartPath();
+                ctx.fill();
+
+                // 随机旋转和平移心形
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 200;
+                const offsetX = Math.cos(angle) * radius;
+                const offsetY = Math.sin(angle) * radius;
+
+                ctx.translate(x + offsetX, y + offsetY);
+                ctx.rotate(angle);
+
+                // 逐渐缩小心形
+                ctx.scale(0.95, 0.95);
+            }
+        }
+
+        // 监听鼠标点击事件，在点击位置触发心形烟花效果
+        canvas.addEventListener('click', function(event) {
+            const x = event.clientX;
+            const y = event.clientY;
+            const color = '#' + Math.floor(Math.random()*16777215).toString(16); // 随机颜色
+
+            renderFirework(x, y, color);
+        });
+    </script>
+</body>
+</html>
